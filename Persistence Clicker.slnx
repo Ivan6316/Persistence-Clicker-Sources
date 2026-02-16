@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Persistence Clicker/Persistence Clicker.vcxproj" Id="83ab80db-a579-418c-b059-8403bd50b7ad" />
+</Solution>
